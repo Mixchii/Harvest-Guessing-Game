@@ -1,17 +1,17 @@
 # 🌾 Harvest Guessing Game 🌾
 
-Estimate crop weights across different fields before time runs out in this harvest-themed logic game!
+Estimate crop weights across different fields before time runs out in this game.
 
-put a screenshot here
+put a screenshot here (When Github Page is done being developed)
 
 ## Try it
 https://Mixchii.github.io/Guessing-Number-Game/ (defunct rn)
 
 ## Features
--4 Crop Fields: Choose between Berry Patch, Apple Orchard, Corn Field, and Pumpkin Patch with custom weight ranges and day limits.
-- Hints: Receive thermal proximity hints (so like if you're close to the number, you're hot, and if you're far from the number, you're cold) and even/odd hints when days run low.
--Tracks games played, total wins, high scores, and recent match history using local browser storage.
-- Interactive UI: Clean responsive interface with single-keypress input support.
+4 Crop Fields: Choose between Berry Patch, Apple Orchard, Corn Field, and Pumpkin Patch with custom weight ranges and day limits. Pumpkin Patch is the hardest difficulty, and Berry Patch is the easiest one due to the weight ranges of each one.
+Hints: Receive thermal proximity hints (so like if you're close to the number, you're hot, and if you're far from the number, you're cold) and even/odd hints when days are decreasing to a low amount.
+Tracks games played, total wins, high scores, and recent match history using local browser storage.
+Interactive UI: Press buttons and it will actually respond to your input
 
 ## Running locally
 To run this web application locally without an external server:
