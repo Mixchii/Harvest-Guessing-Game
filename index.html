@@ -1,1 +1,31 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Harvest Guessing Game</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="game-container">
+    <h1>🌾 Harvest Guessing Game 🌾</h1>
+
+    <div id="menu-screen" class="screen">
+      <p class="subtitle">Estimate crop weights before time runs out!</p>
+      <div class="button-group">
+        <button onclick="showScreen('field-screen')">1. Play Game</button>
+        <button onclick="showStats()">2. View Stats</button>
+      </div>
+    </div>
+
+    <div id="field-screen" class="screen hidden">
+      <h2>Select a Crop Field</h2>
+      <div class="field-options">
+        <button onclick="selectField(1, 50, 10, 'Berry Patch')">🍓 Berry Patch (1-50 lbs, 10 days)</button>
+        <button onclick="selectField(1, 100, 7, 'Apple Orchard')">🍎 Apple Orchard (1-100 lbs, 7 days)</button>
+        <button onclick="selectField(1, 500, 8, 'Corn Field')">🌽 Corn Field (1-500 lbs, 8 days)</button>
+        <button onclick="selectField(1, 1000, 9, 'Pumpkin Patch')">🎃 Pumpkin Patch (1-1000 lbs, 9 days)</button>
+      </div>
+      <button class="secondary-btn" onclick="showScreen('menu-screen')">Back to Menu</button>
+    </div>
