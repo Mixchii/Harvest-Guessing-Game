@@ -5,7 +5,7 @@ Estimate crop weights across different fields before time runs out in this game.
 put a screenshot here (When Github Page is done being developed)
 
 ## Try it
-https://Mixchii.github.io/Guessing-Number-Game/ (defunct rn)
+https://mixchii.github.io/Harvest-Guessing-Game/
 
 ## Features
 4 Crop Fields: Choose between Berry Patch, Apple Orchard, Corn Field, and Pumpkin Patch with custom weight ranges and day limits. Pumpkin Patch is the hardest difficulty, and Berry Patch is the easiest one due to the weight ranges of each one.
@@ -18,7 +18,7 @@ To run this web application locally without an external server:
 
 1. Clone the repository:
    ```bash
-   git clone [https://github.com/Mixchii/Guessing-Number-Game.git](https://github.com/Mixchii/Guessing-Number-Game.git)
+   git clone [https://github.com/Mixchii/Harvest-Guessing-Game/.git](https://github.com/Mixchii/Harvest-Guessing-Game.git)
 
 2. cd Harvest-Guessing-Game
 3. Open index.html directly in any web browser.
