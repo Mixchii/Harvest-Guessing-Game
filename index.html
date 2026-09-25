@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -29,3 +28,39 @@
       </div>
       <button class="secondary-btn" onclick="showScreen('menu-screen')">Back to Menu</button>
     </div>
+
+    <div id="game-screen" class="screen hidden">
+      <div class="game-header">
+        <span id="field-title">Field</span>
+        <span id="days-badge">Days Left: <strong id="days-left">0</strong></span>
+      </div>
+
+      <div id="game-message" class="message-box">A crop was harvested! Enter your weight guess below.</div>
+      <div id="hint-box" class="hint-box hidden"></div>
+
+      <div class="input-container">
+        <input type="number" id="guess-input" placeholder="Enter weight in lbs">
+        <button onclick="submitGuess()">Submit Guess</button>
+      </div>
+
+      <button class="secondary-btn" onclick="quitGame()">Quit Game</button>
+    </div>
+
+    <div id="stats-screen" class="screen hidden">
+      <h2>=== YOUR HARVEST STATS ===</h2>
+      <div class="stats-summary">
+        <p><strong>Games Played:</strong> <span id="stat-played">0</span></p>
+        <p><strong>Total Wins:</strong> <span id="stat-wins">0</span></p>
+        <p><strong>Best Score:</strong> <span id="stat-best">0</span></p>
+        <p><strong>Total Points Racked Up:</strong> <span id="stat-total-points">0</span></p>
+      </div>
+      <h3>Recent History</h3>
+      <ul id="history-list"></ul>
+      <button class="secondary-btn" onclick="showScreen('menu-screen')">Back to Menu</button>
+    </div>
+  </div>
+
+  <script src="HarvestGuessingGame.js"></script>
+</body>
+</html>
+
