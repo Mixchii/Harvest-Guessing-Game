@@ -2,7 +2,11 @@
 
 Estimate crop weights across different fields before time runs out in this game.
 
-put a screenshot here (When Github Page is done being developed)
+<img width="1920" height="1080" alt="Screenshot (397)" src="https://github.com/user-attachments/assets/efd5bdba-4b8b-426d-b9da-819e9ea9f956" />
+<img width="1920" height="1080" alt="Screenshot (400)" src="https://github.com/user-attachments/assets/b86fb0f4-d480-4156-b13d-e99c4ca2223c" />
+<img width="1920" height="1080" alt="Screenshot (401)" src="https://github.com/user-attachments/assets/7bfe5688-e202-4a17-9c0d-71b7c1089b2c" />
+<img width="1920" height="1080" alt="Screenshot (398)" src="https://github.com/user-attachments/assets/9f85243c-0e1d-409d-91a1-1addb0814092" />
+
 
 ## Try it
 https://mixchii.github.io/Harvest-Guessing-Game/
