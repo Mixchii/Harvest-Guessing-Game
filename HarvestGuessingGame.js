@@ -1,113 +1,193 @@
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f4f1ea;
-  color: #3e2723;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  margin: 0;
+let secretWeight = 0;
+let minWeight = 1;
+let maxWeight = 100;
+let maxDays = 7;
+let daysLeft = 7;
+let guesses = [];
+let startTime = 0;
+let currentFieldName = "";
+
+let gamesPlayed = 0;
+let wins = 0;
+let bestScore = 0;
+let totalPoints = 0;
+let historyLog = [];
+
+window.onload = function() {
+  loadData();
+  
+  const input = document.getElementById("guess-input");
+  if (input) {
+    input.addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+        submitGuess();
+      }
+    });
+  }
+};
+
+function loadData() {
+  const saved = localStorage.getItem("harvest_journal");
+  if (!saved) return;
+
+  try {
+    const data = JSON.parse(saved);
+    gamesPlayed = data.gamesPlayed || 0;
+    wins = data.wins || 0;
+    bestScore = data.bestScore || 0;
+    totalPoints = data.totalPoints || 0;
+    historyLog = data.historyLog || [];
+  } catch (e) {}
 }
 
-.game-container {
-  background: #ffffff;
-  border: 2px solid #8d6e63;
-  border-radius: 12px;
-  padding: 30px;
-  width: 90%;
-  max-width: 480px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-  text-align: center;
+function saveData() {
+  const data = {
+    gamesPlayed: gamesPlayed,
+    wins: wins,
+    bestScore: bestScore,
+    totalPoints: totalPoints,
+    historyLog: historyLog
+  };
+  localStorage.setItem("harvest_journal", JSON.stringify(data));
 }
 
-h1 {
-  color: #2e7d32;
-  margin-top: 0;
+function showScreen(screenId) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.add("hidden"));
+  const target = document.getElementById(screenId);
+  if (target) {
+    target.classList.remove("hidden");
+  }
 }
 
-.hidden {
-  display: none !important;
+function selectField(min, max, days, name) {
+  minWeight = min;
+  maxWeight = max;
+  maxDays = days;
+  daysLeft = days;
+  currentFieldName = name;
+  
+  secretWeight = Math.floor(Math.random() * (maxWeight - minWeight + 1)) + minWeight;
+  guesses = [];
+  startTime = Date.now();
+
+  document.getElementById("field-title").innerText = currentFieldName;
+  document.getElementById("days-left").innerText = daysLeft;
+  document.getElementById("game-message").innerText = `Guess the weight between ${minWeight} and ${maxWeight} lbs.`;
+  document.getElementById("hint-box").classList.add("hidden");
+  document.getElementById("guess-input").value = "";
+
+  showScreen("game-screen");
 }
 
-.button-group, .field-options {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin: 20px 0;
+function printHint(guess) {
+  const diff = Math.abs(secretWeight - guess);
+  let hintText = "";
+
+  if (diff <= 2) {
+    hintText = "Hint: Very hot! You are within 2 lbs.";
+  } else if (diff <= 10) {
+    hintText = "Hint: Getting warm! Within 10 lbs.";
+  } else {
+    hintText = "Hint: Cold! Far from the target.";
+  }
+
+  if (daysLeft <= Math.floor(maxDays / 2)) {
+    const parity = (secretWeight % 2 === 0) ? "EVEN" : "ODD";
+    hintText += `<br>Extra Hint: The weight is an <strong>${parity}</strong> number.`;
+  }
+
+  const hintBox = document.getElementById("hint-box");
+  hintBox.innerHTML = hintText;
+  hintBox.classList.remove("hidden");
 }
 
-button {
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  padding: 12px 18px;
-  font-size: 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+function submitGuess() {
+  const inputEl = document.getElementById("guess-input");
+  const rawValue = inputEl.value.trim();
+  const guess = parseInt(rawValue, 10);
+
+  if (isNaN(guess)) {
+    document.getElementById("game-message").innerText = "Please enter a valid number.";
+    return;
+  }
+
+  if (guess < minWeight || guess > maxWeight) {
+    document.getElementById("game-message").innerText = `Out of range! Guess between ${minWeight} and ${maxWeight} lbs.`;
+    return;
+  }
+
+  guesses.push(guess);
+  inputEl.value = "";
+
+  if (guess === secretWeight) {
+    const elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
+    const roundScore = Math.max(0, (maxWeight - minWeight) * 10 + (daysLeft * 50) - (elapsedSeconds * 2));
+
+    gamesPlayed++;
+    wins++;
+    totalPoints += roundScore;
+    
+    let isHighScore = false;
+    if (roundScore > bestScore) {
+      bestScore = roundScore;
+      isHighScore = true;
+    }
+
+    historyLog.push(`WON - Target: ${secretWeight} lbs in ${guesses.length} tries (+${roundScore} pts)`);
+    saveData();
+
+    let winMsg = `🎉 YOU GOT IT! The crop weight was ${secretWeight} lbs!<br>`;
+    winMsg += `Time taken: ${elapsedSeconds}s | Score: ${roundScore} pts (Total Points: ${totalPoints})`;
+    if (isHighScore) winMsg += `<br><strong>⭐ New Best Single-Game Score! ⭐</strong>`;
+
+    document.getElementById("game-message").innerHTML = winMsg;
+    document.getElementById("hint-box").classList.add("hidden");
+    setTimeout(() => showScreen("menu-screen"), 3500);
+    return;
+  }
+
+  daysLeft--;
+  document.getElementById("days-left").innerText = daysLeft;
+
+  if (daysLeft <= 0) {
+    gamesPlayed++;
+    historyLog.push(`LOST - Target was ${secretWeight} lbs`);
+    saveData();
+
+    document.getElementById("game-message").innerText = `Out of days! The exact weight was ${secretWeight} lbs.`;
+    document.getElementById("hint-box").classList.add("hidden");
+    setTimeout(() => showScreen("menu-screen"), 3000);
+    return;
+  }
+
+  const direction = (guess < secretWeight) ? "HEAVIER" : "LIGHTER";
+  document.getElementById("game-message").innerText = `Too ${guess < secretWeight ? "light" : "heavy"}! The crop is ${direction}.`;
+  printHint(guess);
 }
 
-button:hover {
-  background-color: #388e3c;
+function quitGame() {
+  showScreen("menu-screen");
 }
 
-button.secondary-btn {
-  background-color: #78909c;
-  margin-top: 15px;
-}
+function showStats() {
+  document.getElementById("stat-played").innerText = gamesPlayed;
+  document.getElementById("stat-wins").innerText = wins;
+  document.getElementById("stat-best").innerText = bestScore;
+  document.getElementById("stat-total-points").innerText = totalPoints;
 
-button.secondary-btn:hover {
-  background-color: #546e7a;
-}
+  const historyList = document.getElementById("history-list");
+  historyList.innerHTML = "";
 
-.game-header {
-  display: flex;
-  justify-content: space-between;
-  font-weight: bold;
-  margin-bottom: 15px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #d7ccc8;
-}
+  if (historyLog.length === 0) {
+    historyList.innerHTML = "<li>No games played yet.</li>";
+  } else {
+    historyLog.slice(-5).reverse().forEach(record => {
+      const li = document.createElement("li");
+      li.innerText = record;
+      historyList.appendChild(li);
+      
+    });
+  }
 
-.message-box {
-  background: #f1f8e9;
-  border-left: 4px solid #7cb342;
-  padding: 12px;
-  margin-bottom: 15px;
-  text-align: left;
-}
-
-.hint-box {
-  background: #fff3e0;
-  border-left: 4px solid #ff9800;
-  padding: 10px;
-  margin-bottom: 15px;
-  font-size: 14px;
-  text-align: left;
-}
-
-.input-container {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-input[type="number"] {
-  flex: 1;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-
-.stats-summary {
-  text-align: left;
-  background: #fafafa;
-  padding: 15px;
-  border-radius: 6px;
-}
-
-ul {
-  text-align: left;
-  padding-left: 20px;
+  showScreen("stats-screen");
 }
